@@ -2,6 +2,15 @@
 
 import axios from "axios"
 
+const SERVERS = [
+  {
+    name: 'mc_goonville',
+  },
+  {
+    name: 'mc_tittletown',
+  }
+]
+
 export default function Home() {
   function handleStart(containerName) {
     axios.post(`/api/server/${containerName}/start`)
@@ -19,14 +28,22 @@ export default function Home() {
     <div className='p-8'>
       <h1 className="mt-8 font-semibold text-3xl text-center">Minecraft Server List</h1>
 
-      <div className="flex flex-col gap-2 mt-5">
-        <button onClick={() => handleStart('mc_goonille')} className='bg-zinc-800 hover:bg-zinc-700 px-2 py-1 rounded-md cursor-pointer'>
-          Start
-        </button>
+      <div className="flex flex-col gap-4 mt-12">
+        {SERVERS.map(server => (
+          <div className="flex justify-between items-center gap-4 bg-zinc-900 p-2 border border-zinc-800 rounded-lg">
+            <h2 className="bg-zinc-800 px-2 py-1 rounded-md">{server.name}</h2>
 
-        <button onClick={() => handleStop('mc_goonville')} className='bg-zinc-800 hover:bg-zinc-700 px-2 py-1 rounded-md cursor-pointer'>
-          Stop
-        </button>
+            <div className="flex gap-2">
+              <button onClick={() => handleStart(server.name)} className='bg-zinc-800 hover:bg-zinc-700 px-2 py-1 rounded-md cursor-pointer'>
+                Start
+              </button>
+
+              <button onClick={() => handleStop(server.name)} className='bg-zinc-800 hover:bg-zinc-700 px-2 py-1 rounded-md cursor-pointer'>
+                Stop
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   )
