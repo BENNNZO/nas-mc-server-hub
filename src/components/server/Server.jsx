@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import axios from "axios"
 
 import StartStopButton from "./StartStopButton"
+import ServerName from "./ServerName"
 
 export default function Server({ containerName }) {
   // ( loading | started | stopped )
@@ -65,7 +66,7 @@ export default function Server({ containerName }) {
 
   return (
     <div className="flex justify-between items-center gap-4 bg-zinc-900 p-2 border border-zinc-800 rounded-lg">
-      <h2 className="bg-zinc-800 px-2 py-1 rounded-md">{containerName}</h2>
+      <ServerName name={containerName} />
 
       <StartStopButton
         handleStart={handleStart}
