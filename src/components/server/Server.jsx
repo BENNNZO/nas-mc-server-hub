@@ -6,8 +6,8 @@ import axios from "axios"
 import StartStopButton from "./StartStopButton"
 
 export default function Server({ containerName }) {
-  // ( fetching | starting | stopping | started | stopped )
-  const [status, setStatus] = useState('fetching')
+  // ( loading | started | stopped )
+  const [status, setStatus] = useState('loading')
 
   useEffect(() => {
     async function getInitialStatus() {
@@ -19,7 +19,7 @@ export default function Server({ containerName }) {
   }, [])
 
   function handleStart() {
-    setStatus('starting')
+    setStatus('loading')
 
     axios.post(`/api/server/${containerName}/start`)
       .then(async (res) => {
@@ -37,7 +37,7 @@ export default function Server({ containerName }) {
   }
 
   function handleStop() {
-    setStatus('stopping')
+    setStatus('loading')
 
     axios.post(`/api/server/${containerName}/stop`)
       .then(async (res) => {
@@ -66,14 +66,12 @@ export default function Server({ containerName }) {
   return (
     <div className="flex justify-between items-center gap-4 bg-zinc-900 p-2 border border-zinc-800 rounded-lg">
       <h2 className="bg-zinc-800 px-2 py-1 rounded-md">{containerName}</h2>
-      <p>{status}</p>
 
-      <div className="flex gap-2">
-        <StartStopButton
-          handleStart={handleStart}
-          handleStop={handleStop}
-        />
-      </div>
+      <StartStopButton
+        handleStart={handleStart}
+        handleStop={handleStop}
+        status={status}
+      />
     </div>
   )
 }
