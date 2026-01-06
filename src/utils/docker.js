@@ -12,3 +12,8 @@ export function startServer(containerName) {
 export function stopServer(containerName) {
     return docker.post(`/containers/${containerName}/stop`)
 }
+
+export async function getContainerStatus(containerName) {
+    const res = await docker.get(`/containers/${containerName}/json`)
+    return res.data.State
+}

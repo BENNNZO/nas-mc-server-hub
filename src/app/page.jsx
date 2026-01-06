@@ -23,6 +23,12 @@ export default function Home() {
       .then(res => console.log(res))
       .catch(err => console.log(err))
   }
+  
+  function handleStatus(containerName) {
+    axios.post(`/api/server/${containerName}/status`)
+      .then(res => console.log(res))
+      .catch(err => console.log(err))
+  }
 
   return (
     <div className='p-8'>
@@ -40,6 +46,10 @@ export default function Home() {
 
               <button onClick={() => handleStop(server.name)} className='bg-zinc-800 hover:bg-zinc-700 px-2 py-1 rounded-md cursor-pointer'>
                 Stop
+              </button>
+
+              <button onClick={() => handleStatus(server.name)} className='bg-zinc-800 hover:bg-zinc-700 px-2 py-1 rounded-md cursor-pointer'>
+                Status
               </button>
             </div>
           </div>
