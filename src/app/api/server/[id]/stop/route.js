@@ -4,7 +4,7 @@ export async function POST(req, { params }) {
     try {
         const { id } = await params
         
-        stopServer(id)
+        await stopServer(id)
         
         return Response.json({ ok: true })
     } catch (err) {

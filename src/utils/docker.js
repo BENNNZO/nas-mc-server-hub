@@ -6,9 +6,9 @@ const docker = axios.create({
 })
 
 export function startServer(containerName) {
-    docker.post(`/containers/${containerName}/start`)
+    return docker.post(`/containers/${containerName}/start`)
 }
 
 export function stopServer(containerName) {
-    docker.post(`/containers/${containerName}/stop`)
+    return docker.post(`/containers/${containerName}/stop`)
 }

@@ -4,7 +4,7 @@ export async function POST(req, { params }) {
     try {
         const { id } = await params
         
-        startServer(id)
+        await startServer(id)
         
         return Response.json({ ok: true })
     } catch (err) {
