@@ -4,11 +4,16 @@ import { useState, useEffect } from "react"
 import axios from "axios"
 
 export default function Server({ name }) {
+  // ( fetching | starting | stopping | started | stopped )
   const [status, setStatus] = useState('fetching')
 
   useEffect(() => {
-    const data = handleStatus(name)
-    if (data) setStatus(data.Running ? 'started' : 'stopped')
+    async function getInitialStatus() {
+      const data = await getStatus(name)
+      if (data) setStatus(data.Running ? 'started' : 'stopped')
+    }
+
+    getInitialStatus()
   }, [])
 
   function handleStart(containerName) {
@@ -17,9 +22,9 @@ export default function Server({ name }) {
     axios.post(`/api/server/${containerName}/start`)
       .then(async (res) => {
         while (true) {
-          const data = handleStatus(containerName)
+          const data = await getStatus(containerName)
           
-          if (data.Running === true) {
+          if (data?.Running === true) {
             setStatus('started')
             break
           }
@@ -27,19 +32,33 @@ export default function Server({ name }) {
           await new Promise(resolve => setTimeout(resolve, 1000))
         }
       })
-      .catch(err => console.log(err))
   }
 
   function handleStop(containerName) {
+    setStatus('stopping')
+
     axios.post(`/api/server/${containerName}/stop`)
-      .then(res => setStatus('stopped'))
-      .catch(err => console.log(err))
+      .then(async (res) => {
+        while (true) {
+          const data = await getStatus(containerName)
+          
+          if (data?.Running === false) {
+            setStatus('stopped')
+            break
+          }
+
+          await new Promise(resolve => setTimeout(resolve, 1000))
+        }
+      })
   }
 
-  function handleStatus(containerName) {
-    axios.post(`/api/server/${containerName}/status`)
-      .then(res => { return res.data.status })
-      .catch(err => console.log(err))
+  async function getStatus(containerName) {
+    try {
+      const res = await axios.post(`/api/server/${containerName}/status`)
+      return res.data.status 
+    } catch (err) {
+      return null
+    }
   }
 
   return (
@@ -56,7 +75,7 @@ export default function Server({ name }) {
           Stop
         </button>
 
-        <button onClick={() => handleStatus(name)} className='bg-zinc-800 hover:bg-zinc-700 px-2 py-1 rounded-md cursor-pointer'>
+        <button onClick={() => getStatus(name)} className='bg-zinc-800 hover:bg-zinc-700 px-2 py-1 rounded-md cursor-pointer'>
           Status
         </button>
       </div>
