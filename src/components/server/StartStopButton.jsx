@@ -1,13 +1,35 @@
+const ICON_MAP = {
+  stopped: { src: '/icons/play.svg', label: 'Start server' },
+  started: { src: '/icons/stop.svg', label: 'Stop server' },
+  loading: { src: '/icons/load.svg', label: 'Loading' },
+}
+
 export default function StartStopButton({
   handleStart,
   handleStop,
   status,
 }) {
+  const isStarted = status === 'started'
+  const isLoading = status === 'loading'
+  const icon = ICON_MAP[status]
+
+  function handleClick() {
+    if (isStarted) {
+      handleStop()
+    } else {
+      handleStart()
+    }
+  }
+
   return (
-    <button onClick={(status === 'started' && status !== 'loading') ? handleStop() : handleStart()} className='bg-zinc-800 hover:bg-zinc-700 p-2 rounded-md cursor-pointer'>
-      {status === 'started' && <img src="/icons/stop.svg" alt="stop icon" className="size-6 invert opacity-75" />}
-      {status === 'stopped' && <img src="/icons/play.svg" alt="play icon" className="size-6 invert opacity-75" />}
-      {status === 'loading' && <img src="/icons/load.svg" alt="load icon" className="size-6 invert opacity-75" />}
+    <button
+      className={`bg-zinc-800 p-2 rounded-md cursor-pointer duration-150 ${isLoading ? 'scale-95 cursor-progress' : 'hover:bg-zinc-700'}`}
+      onClick={handleClick}
+      disabled={isLoading}
+      aria-busy={isLoading}
+      title={icon.label}
+    >
+      <img src={icon.src} alt={icon.label} className="size-6 invert opacity-75" />
     </button>
   )
 }
