@@ -1,10 +1,10 @@
-import { startServer } from '@/utils/docker'
+import { stopServer } from '@/utils/docker'
 
 export async function POST(req, { params }) {
     try {
         const { id } = await params
         
-        startServer(id)
+        stopServer(id)
         
         return Response.json({ ok: true })
     } catch (err) {
