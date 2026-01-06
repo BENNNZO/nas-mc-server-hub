@@ -1,3 +1,5 @@
+import { AnimatePresence, motion } from "framer-motion"
+
 const ICON_MAP = {
   stopped: { src: '/icons/play.svg', label: 'Start server' },
   started: { src: '/icons/stop.svg', label: 'Stop server' },
@@ -29,7 +31,16 @@ export default function StartStopButton({
       aria-busy={isLoading}
       title={icon.label}
     >
-      <img src={icon.src} alt={icon.label} className="size-6 invert opacity-75" />
+      <AnimatePresence mode="popLayout">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          key={icon.src}
+        >
+          <img src={icon.src} alt={icon.label} className="size-6 invert opacity-75" />
+        </motion.div>
+      </AnimatePresence>
     </button>
   )
 }
