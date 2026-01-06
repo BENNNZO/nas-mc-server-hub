@@ -8,8 +8,8 @@ export default function Home() {
       <h1 className="mt-8 font-semibold text-3xl text-center">Minecraft Server List</h1>
 
       <div className="flex flex-col gap-4 mt-12">
-        {SERVERS.map((name, index) => (
-          <Server key={index} name={name} />
+        {SERVERS.map((containerName, index) => (
+          <Server key={index} containerName={containerName} />
         ))}
       </div>
     </div>

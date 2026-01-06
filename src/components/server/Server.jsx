@@ -3,27 +3,29 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
 
-export default function Server({ name }) {
+import StartStopButton from "./StartStopButton"
+
+export default function Server({ containerName }) {
   // ( fetching | starting | stopping | started | stopped )
   const [status, setStatus] = useState('fetching')
 
   useEffect(() => {
     async function getInitialStatus() {
-      const data = await getStatus(name)
+      const data = await getStatus(containerName)
       if (data) setStatus(data.Running ? 'started' : 'stopped')
     }
 
     getInitialStatus()
   }, [])
 
-  function handleStart(containerName) {
+  function handleStart() {
     setStatus('starting')
-    
+
     axios.post(`/api/server/${containerName}/start`)
       .then(async (res) => {
         while (true) {
           const data = await getStatus(containerName)
-          
+
           if (data?.Running === true) {
             setStatus('started')
             break
@@ -34,14 +36,14 @@ export default function Server({ name }) {
       })
   }
 
-  function handleStop(containerName) {
+  function handleStop() {
     setStatus('stopping')
 
     axios.post(`/api/server/${containerName}/stop`)
       .then(async (res) => {
         while (true) {
           const data = await getStatus(containerName)
-          
+
           if (data?.Running === false) {
             setStatus('stopped')
             break
@@ -52,10 +54,10 @@ export default function Server({ name }) {
       })
   }
 
-  async function getStatus(containerName) {
+  async function getStatus() {
     try {
       const res = await axios.post(`/api/server/${containerName}/status`)
-      return res.data.status 
+      return res.data.status
     } catch (err) {
       return null
     }
@@ -63,21 +65,14 @@ export default function Server({ name }) {
 
   return (
     <div className="flex justify-between items-center gap-4 bg-zinc-900 p-2 border border-zinc-800 rounded-lg">
-      <h2 className="bg-zinc-800 px-2 py-1 rounded-md">{name}</h2>
+      <h2 className="bg-zinc-800 px-2 py-1 rounded-md">{containerName}</h2>
       <p>{status}</p>
 
       <div className="flex gap-2">
-        <button onClick={() => handleStart(name)} className='bg-zinc-800 hover:bg-zinc-700 px-2 py-1 rounded-md cursor-pointer'>
-          Start
-        </button>
-
-        <button onClick={() => handleStop(name)} className='bg-zinc-800 hover:bg-zinc-700 px-2 py-1 rounded-md cursor-pointer'>
-          Stop
-        </button>
-
-        <button onClick={() => getStatus(name)} className='bg-zinc-800 hover:bg-zinc-700 px-2 py-1 rounded-md cursor-pointer'>
-          Status
-        </button>
+        <StartStopButton
+          handleStart={handleStart}
+          handleStop={handleStop}
+        />
       </div>
     </div>
   )
