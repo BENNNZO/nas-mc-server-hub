@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from "framer-motion"
+import AnimatedSwap from "../AnimatedSwap"
 
 const ICON_MAP = {
   stopped: { src: '/icons/play.svg', label: 'Start server' },
@@ -31,16 +31,9 @@ export default function StartStopButton({
       aria-busy={isLoading}
       title={icon.label}
     >
-      <AnimatePresence mode="popLayout">
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          key={icon.src}
-        >
-          <img src={icon.src} alt={icon.label} className="size-6 invert opacity-75" />
-        </motion.div>
-      </AnimatePresence>
+      <AnimatedSwap swapKey={icon.src}>
+        <img src={icon.src} alt={icon.label} className="size-6 invert opacity-75" />
+      </AnimatedSwap>
     </button>
   )
 }
