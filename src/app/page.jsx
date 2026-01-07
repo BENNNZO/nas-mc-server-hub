@@ -1,15 +1,26 @@
 import Server from '@/components/server/Server'
 
-export const SERVERS = ['mc_goonville', 'mc_tittletown']
+const SERVERS = [
+  {
+    containerName: 'mc_goonville',
+    displayName: 'Goonville',
+    minecraftVersion: '1.5.2',
+  },
+  {
+    containerName: 'mc_tittletown',
+    displayName: 'Tittletown',
+    minecraftVersion: '1.21.11',
+  },
+]
 
 export default function Home() {
   return (
     <div className='p-8'>
-      <h1 className="mt-8 font-semibold text-3xl text-center">Minecraft Server List</h1>
+      <h1 className="font-semibold text-3xl text-center mt-12 mb-16">Minecraft Server List</h1>
 
-      <div className="flex flex-col items-center gap-4 mt-12">
-        {SERVERS.map((containerName, index) => (
-          <Server key={index} containerName={containerName} />
+      <div className="flex flex-col items-center gap-4">
+        {SERVERS.map((info, index) => (
+          <Server key={index} info={info} />
         ))}
       </div>
     </div>

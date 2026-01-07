@@ -7,18 +7,20 @@ import ServerStatusBadge from "./ServerStatusBadge"
 import StartStopButton from "./StartStopButton"
 import ServerName from "./ServerName"
 
-export default function Server({ containerName }) {
+export default function Server({ info }) {
+  const { containerName, displayName, minecraftVersion } = info
+
   // ( loading | started | stopped )
   const [status, setStatus] = useState('loading')
 
   useEffect(() => {
-    async function getInitialStatus() {
+    async function setInitialStatus() {
       const data = await getStatus(containerName)
       if (data) setStatus(data.Running ? 'started' : 'stopped')
     }
 
-    getInitialStatus()
-  }, [])
+    setInitialStatus()
+  }, [setStatus])
 
   function handleStart() {
     setStatus('loading')
@@ -66,17 +68,20 @@ export default function Server({ containerName }) {
   }
 
   return (
-    <div className="flex justify-between items-center gap-4 bg-zinc-900 p-2 border border-zinc-800 rounded-lg max-w-lg w-full">
-      <div className="flex gap-4 items-center">
-        <ServerName name={containerName} />
-        <ServerStatusBadge status={status} />
+    <div className="group flex justify-between items-center gap-4 bg-zinc-900 p-2 border border-zinc-800 rounded-lg max-w-lg w-full">
+      <div className="flex gap-2 items-center">
+        <ServerName name={displayName} />
+        <p className="opacity-0 group-hover:opacity-50 duration-150 italic">version: {minecraftVersion}</p>
       </div>
 
-      <StartStopButton
-        handleStart={handleStart}
-        handleStop={handleStop}
-        status={status}
-      />
+      <div className="flex gap-4 items-center">
+        <ServerStatusBadge status={status} />
+        <StartStopButton
+          handleStart={handleStart}
+          handleStop={handleStop}
+          status={status}
+        />
+      </div>
     </div>
   )
 }
