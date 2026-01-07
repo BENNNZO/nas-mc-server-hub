@@ -73,9 +73,12 @@ export default function Server({ info }) {
   }
 
   return (
-    <div className="group flex justify-between items-center gap-4 bg-zinc-900 p-2 border border-zinc-800 rounded-lg max-w-xl w-full">
+    <div className="group flex justify-between items-start gap-4 bg-zinc-900 p-2 border border-zinc-800 rounded-lg max-w-xl w-full">
       <div className="flex flex-col gap-2 items-start">
-        <ServerName name={displayName} />
+        <div className="flex gap-2 items-center pl-1">
+          <ServerStatusBadge status={status} />
+          <ServerName name={displayName} />
+        </div>
 
         <div className="flex gap-2">
           <p className="bg-zinc-800 rounded-full border border-zinc-700 px-2 opacity-50">{minecraftVersion}</p>
@@ -83,14 +86,11 @@ export default function Server({ info }) {
         </div>
       </div>
 
-      <div className="flex gap-4 items-center">
-        <ServerStatusBadge status={status} />
-        <StartStopButton
-          handleStart={handleStart}
-          handleStop={handleStop}
-          status={status}
-        />
-      </div>
+      <StartStopButton
+        handleStart={handleStart}
+        handleStop={handleStop}
+        status={status}
+      />
     </div>
   )
 }
