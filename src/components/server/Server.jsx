@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { motion } from "framer-motion"
 import axios from "axios"
 
 import ServerStatusBadge from "./ServerStatusBadge"
@@ -72,8 +73,36 @@ export default function Server({ info }) {
     }
   }
 
+  const isStopped = status === 'stopped'
+  const isLoading = status === 'loading'
+
+  const loadingState = {
+    animate: {
+      scale: [0.98, 1],
+      transition: {
+        duration: 1,
+        repeat: Infinity,
+        repeatType: 'mirror',
+      },
+    },
+  }
+
+  const stoppedState = {
+    animate: {
+      opacity: isStopped ? 0.5 : 1,
+      scale: isStopped ? 0.98 : 1,
+      transition: {
+        duration: 0.5,
+      },
+    },
+  }
+
   return (
-    <div className="group flex justify-between items-start gap-4 bg-zinc-900 p-2 border border-zinc-800 rounded-lg max-w-xl w-full">
+    <motion.div
+      className='group flex justify-between items-start gap-4 bg-zinc-900 p-2 border border-zinc-800 rounded-lg max-w-xl w-full'
+      variants={isLoading ? loadingState : stoppedState}
+      animate="animate"
+    >
       <div className="flex flex-col gap-2 items-start">
         <div className="flex gap-2 items-center pl-1">
           <ServerStatusBadge status={status} />
@@ -91,6 +120,6 @@ export default function Server({ info }) {
         handleStop={handleStop}
         status={status}
       />
-    </div>
+    </motion.div>
   )
 }
