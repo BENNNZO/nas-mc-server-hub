@@ -1,4 +1,5 @@
 import Server from '@/components/server/Server'
+import PageHeader from '@/components/PageHeader'
 
 const SERVERS = [
   {
@@ -18,7 +19,7 @@ const SERVERS = [
 export default function Home() {
   return (
     <div className='p-8'>
-      <h1 className="font-semibold text-3xl text-center mt-12 mb-16">Minecraft Server List</h1>
+      <PageHeader />
 
       <div className="flex flex-col items-center gap-4">
         {SERVERS.map((info, index) => (
