@@ -66,7 +66,7 @@ export default function Server({ containerName }) {
   }
 
   return (
-    <div className="flex justify-between items-center gap-4 bg-zinc-900 p-2 border border-zinc-800 rounded-lg">
+    <div className="flex justify-between items-center gap-4 bg-zinc-900 p-2 border border-zinc-800 rounded-lg max-w-lg w-full">
       <div className="flex gap-4 items-center">
         <ServerName name={containerName} />
         <ServerStatusBadge status={status} />
