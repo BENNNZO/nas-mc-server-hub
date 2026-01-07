@@ -8,7 +8,12 @@ import StartStopButton from "./StartStopButton"
 import ServerName from "./ServerName"
 
 export default function Server({ info }) {
-  const { containerName, displayName, minecraftVersion } = info
+  const {
+    containerName,
+    displayName,
+    minecraftVersion,
+    serverAddress
+  } = info
 
   // ( loading | started | stopped )
   const [status, setStatus] = useState('loading')
@@ -68,10 +73,14 @@ export default function Server({ info }) {
   }
 
   return (
-    <div className="group flex justify-between items-center gap-4 bg-zinc-900 p-2 border border-zinc-800 rounded-lg max-w-lg w-full">
-      <div className="flex gap-2 items-center">
+    <div className="group flex justify-between items-center gap-4 bg-zinc-900 p-2 border border-zinc-800 rounded-lg max-w-xl w-full">
+      <div className="flex flex-col gap-2 items-start">
         <ServerName name={displayName} />
-        <p className="opacity-0 group-hover:opacity-50 duration-150 italic">version: {minecraftVersion}</p>
+
+        <div className="flex gap-2">
+          <p className="bg-zinc-800 rounded-full border border-zinc-700 px-2 opacity-50">{minecraftVersion}</p>
+          <p className="bg-zinc-800 rounded-full border border-zinc-700 px-2 opacity-50">{serverAddress}</p>
+        </div>
       </div>
 
       <div className="flex gap-4 items-center">
