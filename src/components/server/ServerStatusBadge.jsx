@@ -6,8 +6,12 @@ const COLOR_MAP = {
 
 export default function ServerStatusBadge({ status }) {
   const backgroundColor = COLOR_MAP[status]
+  const isStarted = status === 'started'
 
   return (
-    <div className={`rounded-full size-3 ${backgroundColor}`} />
+    <>
+      <div className={`rounded-full size-3 ${backgroundColor}`} />
+      {isStarted && <div className={`rounded-full size-3 animate-ping absolute ${backgroundColor}`} />}
+    </>
   )
 }
