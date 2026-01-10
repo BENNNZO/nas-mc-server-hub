@@ -62,10 +62,6 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=deps /app/rcon-service/node_modules ./rcon-service/node_modules
 COPY --from=builder --chown=nextjs:nodejs /app/rcon-service/index.js ./rcon-service/
 
-# Copy entrypoint script
-COPY --chown=nextjs:nodejs docker-entrypoint.sh ./
-RUN chmod +x docker-entrypoint.sh
-
 USER nextjs
 
 EXPOSE 3000 3001
@@ -76,4 +72,4 @@ ENV RCON_SERVICE_PORT=3001
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/config/next-config-js/output
 ENV HOSTNAME="0.0.0.0"
-CMD ["./docker-entrypoint.sh"]
+CMD ["sh", "-c", "node /app/rcon-service/index.js & exec node server.js"]
