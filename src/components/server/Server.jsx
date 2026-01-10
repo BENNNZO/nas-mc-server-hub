@@ -73,24 +73,12 @@ export default function Server({ info }) {
     }
   }
 
-  const isStopped = status === 'stopped'
   const isLoading = status === 'loading'
 
-  const loadingState = {
+  const animation = {
     animate: {
-      scale: [0.98, 1],
-      transition: {
-        duration: 1,
-        repeat: Infinity,
-        repeatType: 'mirror',
-      },
-    },
-  }
-
-  const stoppedState = {
-    animate: {
-      opacity: isStopped ? 0.5 : 1,
-      scale: isStopped ? 0.98 : 1,
+      opacity: isLoading ? 0.75 : 1,
+      scale: isLoading ? 0.98 : 1,
       transition: {
         duration: 0.5,
       },
@@ -99,9 +87,8 @@ export default function Server({ info }) {
 
   return (
     <motion.div
-      className='group flex justify-between items-start gap-4 bg-zinc-900 p-2 border border-zinc-800 rounded-lg max-w-xl w-full'
-      variants={isLoading ? loadingState : stoppedState}
-      animate="animate"
+      className='group flex justify-between items-start gap-4 bg-zinc-900 shadow-md p-2 border border-zinc-800 rounded-lg max-w-xl w-full'
+      {...animation}
     >
       <div className="flex flex-col gap-2 items-start">
         <div className="flex gap-2 items-center pl-1">

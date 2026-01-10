@@ -25,7 +25,7 @@ export default function StartStopButton({
 
   return (
     <button
-      className={`bg-zinc-800 p-2 rounded-md cursor-pointer duration-150 ${isLoading ? 'cursor-progress' : 'hover:bg-zinc-700'}`}
+      className={`p-2 rounded-md cursor-pointer duration-150 ${isLoading ? 'cursor-progress' : 'hover:bg-zinc-700'}`}
       onClick={handleClick}
       disabled={isLoading}
       aria-busy={isLoading}
