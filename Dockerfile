@@ -17,6 +17,10 @@ RUN \
   else echo "Lockfile not found." && exit 1; \
   fi
 
+# Install RCON service dependencies
+COPY rcon-service/package.json ./rcon-service/
+RUN cd rcon-service && npm install
+
 
 # Rebuild the source code only when needed
 FROM base AS builder
@@ -54,13 +58,22 @@ COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
+# Copy RCON service
+COPY --from=deps /app/rcon-service/node_modules ./rcon-service/node_modules
+COPY --from=builder --chown=nextjs:nodejs /app/rcon-service/index.js ./rcon-service/
+
+# Copy entrypoint script
+COPY --chown=nextjs:nodejs docker-entrypoint.sh ./
+RUN chmod +x docker-entrypoint.sh
+
 USER nextjs
 
-EXPOSE 3000
+EXPOSE 3000 3001
 
 ENV PORT=3000
+ENV RCON_SERVICE_PORT=3001
 
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/config/next-config-js/output
 ENV HOSTNAME="0.0.0.0"
-CMD ["node", "server.js"]
+CMD ["./docker-entrypoint.sh"]
